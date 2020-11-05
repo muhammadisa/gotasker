@@ -9,14 +9,15 @@ import (
 
 func currentTimeAddByString(days int) string {
 	return time.Date(
-		2020, 11, 16,
+		2020, 11, 5,
 		0, 0, 0, 0, time.Local).
 		AddDate(0, 0, days).
 		Format("2006-01-02")
 }
 
-func retrieveDaysRemaining(sess *dbr.Session) []int {
+func dates(sess *dbr.Session) []string {
 	var days []int
+	var dates []string
 	_, err := sess.Select("days_remaining").
 		From("deadlines").
 		Load(&days)
@@ -24,35 +25,30 @@ func retrieveDaysRemaining(sess *dbr.Session) []int {
 		log.Fatal(err)
 		return nil
 	}
-	return days
+	for _, day := range days {
+		dates = append(dates, currentTimeAddByString(day))
+	}
+	return dates
 }
 
-func retrieveDeadlines(sess *dbr.Session, day int, deadlinesFiltered *[]models.Deadline) {
+func deadlines(sess *dbr.Session, date []string) []models.Deadline {
+	var deadlines []models.Deadline
 	_, err := sess.Select("*").
 		From("deadlines").
-		Where("deadline = ? AND warned = ?", currentTimeAddByString(day), false).
-		Load(deadlinesFiltered)
+		Where("deadline IN ? AND warned = ?", date, false).
+		Load(&deadlines)
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-func extractDeadlines(sess *dbr.Session, daysRemaining []int) []models.Deadline {
-	var deadlinesFiltered []models.Deadline
-	for i := 1; i <= len(daysRemaining)-1; i++ {
-		retrieveDeadlines(sess, daysRemaining[i], &deadlinesFiltered)
-	}
-	return deadlinesFiltered
+	return deadlines
 }
 
 // DoAction which related to deadline cron
 func DoAction(sess *dbr.Session) {
 	defer log.Println("execute completed")
-
-	daysRemaining := retrieveDaysRemaining(sess)
-	deadlinesFiltered := extractDeadlines(sess, daysRemaining)
-
-	for index, deadline := range deadlinesFiltered {
+	dates := dates(sess)
+	deadlines := deadlines(sess, dates)
+	for index, deadline := range deadlines {
 		log.Println("Publish Message", index, deadline)
 	}
 }
