@@ -20,7 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66570a7f-27ad-43ec-b9bd-894e669c13a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cron/app/deadline/action.go" beforeDir="false" afterPath="$PROJECT_DIR$/cron/app/deadline/action.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
