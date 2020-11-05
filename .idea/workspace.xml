@@ -20,15 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66570a7f-27ad-43ec-b9bd-894e669c13a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/cron/models/deadline.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cron/app/deadline/action.go" beforeDir="false" afterPath="$PROJECT_DIR$/cron/app/deadline/action.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cron/app/flush/action.go" beforeDir="false" afterPath="$PROJECT_DIR$/cron/app/flush/action.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cron/cron_executor.go" beforeDir="false" afterPath="$PROJECT_DIR$/cron/cron_executor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cron/cronmaker/cronmaker.go" beforeDir="false" afterPath="$PROJECT_DIR$/cron/cronmaker/cronmaker.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

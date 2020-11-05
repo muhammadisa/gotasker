@@ -9,10 +9,12 @@ import (
 
 // DoAction which related to deadline cron
 func DoAction(sess *dbr.Session) {
+	defer log.Println("execute completed")
 	formatLayout := "2006-01-02"
 
 	var err error
-	var deadlines []models.Deadline
+	var daysRemaining []int
+	var deadlinesFiltered []models.Deadline
 
 	//Date(2020, 11, 05, 0, 0, 0, 0, time.Local)
 	//Add(time.Hour * 24 * 1 * time.Duration(-deadline.DaysRemaining))
@@ -20,33 +22,36 @@ func DoAction(sess *dbr.Session) {
 	//	Now().Add(time.Hour * 24 * 1 * time.Duration(3)).Format(formatLayout)
 	//log.Println(currentTime)
 
-	_, err = sess.Select("*").
+	// Retrieve all deadlines
+	_, err = sess.Select("days_remaining").
 		From("deadlines").
-		Load(&deadlines)
+		Load(&daysRemaining)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, deadline := range deadlines {
+	// Scanning all deadlines
+	for indexDays, day := range daysRemaining {
+		// Add current time with days remaining
 		ctAddByDaysRemaining := time.
 			Date(2020, 11, 20, 0, 0, 0, 0, time.Local).
-			AddDate(0, 0, int(deadline.DaysRemaining)).
+			AddDate(0, 0, day).
 			Format(formatLayout)
-
-		var deadlinesFiltered []models.Deadline
-		_, err = sess.Select("*").
-			From("deadlines").
-			Where("deadline = ? AND warned = ?", ctAddByDaysRemaining, false).
-			Load(&deadlinesFiltered)
-		if err != nil {
-			log.Println(err)
-		}
-
-		if len(deadlinesFiltered) != 0 {
-			log.Println(ctAddByDaysRemaining, deadlinesFiltered)
-			deadlinesFiltered = nil
+		if indexDays != len(daysRemaining)-1 {
+			// retrieve deadline wants tobe warned
+			_, err = sess.Select("*").
+				From("deadlines").
+				Where("deadline = ? AND warned = ?", ctAddByDaysRemaining, false).
+				Load(&deadlinesFiltered)
+			if err != nil {
+				log.Println(err)
+			}
 		}else{
-			log.Println(ctAddByDaysRemaining)
+			break
 		}
+	}
+
+	for index, deadline := range deadlinesFiltered {
+		log.Println("Publish Message", index, deadline)
 	}
 }
